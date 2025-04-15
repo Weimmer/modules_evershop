@@ -1,0 +1,7 @@
+{
+    "methods": [
+        "POST"
+    ],
+    "path": "/alipay/notify",
+    "access": "public"
+}

@@ -1,0 +1,11 @@
+{
+    "name": "alipay",
+    "version": "1.0.0",
+    "description": "Alipay payment integration for EverShop",
+    "main": "bootstrap.js",
+    "author": "FEATHFLY",
+    "license": "MIT",
+    "dependencies": {
+        "alipay-sdk": "^4.13.0"
+    }
+}

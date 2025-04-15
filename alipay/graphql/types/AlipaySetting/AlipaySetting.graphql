@@ -1,0 +1,8 @@
+extend type Setting {
+  alipayPaymentStatus: Int
+  alipayDisplayName: String
+  alipayAppId: String
+  alipayPrivateKey: String
+  alipayPublicKey: String
+  alipaySandbox: Int
+}
