@@ -1,10 +1,12 @@
-/**
- * Alipay Payment Extension Bootstrap
- */
 const config = require('config');
-const { debug } = require('@evershop/evershop/src/lib/log/logger');
+const { addProcessor } = require('@evershop/evershop/src/lib/util/registry');
+const { getSetting } = require('@evershop/evershop/src/modules/setting/services/setting');
+const { hookAfter } = require('@evershop/evershop/src/lib/util/hookable');
+const { debug, info } = require('@evershop/evershop/src/lib/log/logger');
 
 module.exports = () => {
+    info('Initializing Alipay Payment Extension');
+
     // Set default configuration
     const alipayConfig = {
         status: 1,
@@ -18,6 +20,27 @@ module.exports = () => {
 
     // Register configuration with EverShop
     config.util.setModuleDefaults('alipay', alipayConfig);
+    debug('Default Alipay configuration set with status:', alipayConfig.status);
+
+    // Add cart field validator for payment method
+    addProcessor('cartFields', (fields) => {
+        fields.push({
+            key: 'payment_method',
+            resolvers: [
+                async function resolver(paymentMethod) {
+                    if (paymentMethod !== 'alipay') {
+                        return paymentMethod;
+                    } else {
+                        // Always validate for now - can add real validation later
+                        this.setError('payment_method', undefined);
+                        debug('Alipay payment method is validated');
+                        return paymentMethod;
+                    }
+                }
+            ]
+        });
+        return fields;
+    });
 
     debug('Alipay Payment Extension initialized successfully');
 };

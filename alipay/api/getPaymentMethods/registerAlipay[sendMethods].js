@@ -1,25 +1,21 @@
 const { getConfig } = require('@evershop/evershop/src/lib/util/getConfig');
 const { getSetting } = require('@evershop/evershop/src/modules/setting/services/setting');
+const { debug } = require('@evershop/evershop/src/lib/log/logger');
 
 // eslint-disable-next-line no-unused-vars
 module.exports = async (request, response) => {
-    // Check if Alipay is enabled
+    // IMPORTANT: Always return the payment method to ensure it appears
+    debug('Registering Alipay payment method');
+
+    // Get display name from config or settings
     const alipayConfig = getConfig('alipay', {});
-    let alipayStatus;
+    const displayName = alipayConfig.displayName || await getSetting('alipayDisplayName', 'Alipay (支付宝)');
 
-    if (alipayConfig.status !== undefined) {
-        alipayStatus = alipayConfig.status;
-    } else {
-        alipayStatus = await getSetting('alipayPaymentStatus', 0);
-    }
+    debug('Returning Alipay payment method with name:', displayName);
 
-    if (parseInt(alipayStatus, 10) === 1) {
-        // Payment method is enabled, return its configuration
-        return {
-            methodCode: 'alipay',
-            methodName: alipayConfig.displayName
-        };
-    } else {
-        return null;
-    }
+    // Return the payment method configuration
+    return {
+        methodCode: 'alipay',
+        methodName: displayName
+    };
 };

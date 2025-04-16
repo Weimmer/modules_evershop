@@ -1,0 +1,7 @@
+{
+    "methods": [
+        "GET"
+    ],
+    "path": "/alipay/test",
+    "access": "public"
+}
